@@ -1,0 +1,30 @@
+<script>
+    let kendara = prompt("Masukan Jenis Kendaraan Anda :")
+    
+    if (kendara ===  'mobil' || kendara === 'motor') {
+        let durasi = parseInt(prompt("Masukan Durasi Anda :"))
+        if (kendara === 'mobil') {
+        let biayaAwal = 5000
+        let selisih = durasi - 2
+        let parkirTambahan = selisih * 2000
+        let biayaTotal = biayaAwal + parkirTambahan
+        if (biayaTotal > 50000) {
+            biayaTotal = 50000
+        }
+        alert("Biaya Parkir Anda : RP " + biayaTotal)
+    } else if (kendara === 'motor') {
+        let biayaAwal = 3000
+        let selisih = durasi - 2
+        let parkirTambahan = selisih * 1000
+        let biayaTotal = biayaAwal + parkirTambahan
+        alert("Biaya Parkir Anda : RP " + biayaTotal)
+        if (biayaTotal >= 30000) {
+            biayaTotal = 30000
+        }
+        alert("Biaya Parkir Anda : RP " + biayaTotal)
+        }
+    }else {
+        alert("kendara Invalid")
+    } 
+
+</script>

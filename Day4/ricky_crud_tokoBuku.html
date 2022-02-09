@@ -1,0 +1,67 @@
+<script>
+  let menus;
+  let books = ["One Piece", "Naruto"];
+  let priceBooks = [7000, 3000];
+
+  do {
+    menus = parseInt(
+      prompt(`Input Menu
+     1. Create data
+     2. Delete data
+     3. Show data
+     4. Update data
+     5. Exit`)
+    );
+
+    if (menus === 1) {
+      let newProduct = prompt(`Input Product Books:`);
+      let newProductPrice = parseInt(prompt(`Input Product Books Price:`));
+
+      books.push(newProduct);
+      priceBooks.push(newProductPrice);
+    } else if (menus === 2) {
+      let productList = "";
+      for (let i = 0; i < books.length; i++) {
+        productList += `${i + 1}. ${books[i]} || Rp.${priceBooks[
+          i
+        ].toLocaleString()}\n`;
+      }
+
+      let deleteData = parseInt(prompt("Hapus Data : \n" + productList));
+      let userDeleteInput = deleteData - 1;
+      books.splice(userDeleteInput, 1);
+      priceBooks.splice(userDeleteInput, 1);
+    } else if (menus === 3) {
+      let productList = "";
+      for (let i = 0; i < books.length; i++) {
+        productList += `${i + 1}. ${books[i]} || Rp.${priceBooks[
+          i
+        ].toLocaleString()}\n`;
+      }
+      alert(productList);
+    } else if (menus === 4) {
+      let productList = "";
+      for (let i = 0; i < books.length; i++) {
+        productList += `${i + 1}. ${books[i]} || Rp.${priceBooks[
+          i
+        ].toLocaleString()}\n`;
+      }
+
+      let inputDataUpdate = parseInt(
+        prompt("Select Data For Update : \n" + productList)
+      );
+      let userUpdateInput = inputDataUpdate - 1;
+      let updatedData = prompt(
+        `Product ${books[userUpdateInput]} di Ubah menjadi: `
+      );
+      let updatedDataPrice = parseInt(
+        prompt(`Harga ${books[userUpdateInput]} di Ubah menjadi: `)
+      );
+      books.splice(userUpdateInput, 1, updatedData);
+      priceBooks.splice(userUpdateInput, 1, updatedDataPrice);
+    } else if (menus === 5) {
+      alert("GoodBye!!!");
+      break;
+    }
+  } while (true);
+</script>

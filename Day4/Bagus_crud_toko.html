@@ -1,0 +1,87 @@
+<script>
+  // Create data
+  // Nama barang (buah), dan ada harga
+  // 2 kali prompt
+  //  - Nama barang
+  //  - Harga barang
+
+  const items = ["Leci", "Apel", "Jeruk", "Mangga"];
+  const itemPrices = [7000, 5000, 3000, 10000];
+
+  do {
+    const userMenuInput = prompt(`Menu :\n
+    1. Create Data
+    2. Delete Data
+    3. Show Data
+    4. Edit Data
+    5. Exit`);
+
+    if (userMenuInput == "1") {
+      let userCreateNewItem = prompt("Input Product Fruit:");
+      let userCreateProductPrice = parseInt(
+        prompt(`Input Product Fruit Price:`)
+      );
+
+      items.push(userCreateNewItem);
+      itemPrices.push(userCreateProductPrice);
+      alert("Item tertambahkan!");
+
+      // Delete data
+      // Pilih barang -> hapus
+    } else if (userMenuInput == "2") {
+      let productList = "";
+      for (let i = 0; i < items.length; i++) {
+        productList += `${i + 1}. ${items[i]} || Rp.${itemPrices[
+          i
+        ].toLocaleString()}\n`;
+      }
+
+      let deleteData = parseInt(prompt("Hapus Data : \n" + productList));
+      let userDeleteInput = deleteData - 1;
+      items.splice(userDeleteInput, 1);
+      itemPrices.splice(userDeleteInput, 1);
+
+      // Show data
+      // Tampilkan nama barang || harganya.
+      // Untuk harga, gunakan Rp./IDR dan separator harga
+    } else if (userMenuInput == "3") {
+      let productList = "";
+      for (let i = 0; i < items.length; i++) {
+        productList += `${i + 1}. ${items[i]} || Rp.${itemPrices[
+          i
+        ].toLocaleString()}\n`;
+      }
+      alert(productList);
+      // Edit data
+      // 3 kali prompt
+      //  - Pilih barang
+      //  - Edit nama barang
+      //  - Edit harga barang
+    } else if (userMenuInput == "4") {
+      let productList = "";
+      for (let i = 0; i < items.length; i++) {
+        productList += `${i + 1}. ${items[i]} || Rp.${itemPrices[
+          i
+        ].toLocaleString()}\n`;
+      }
+
+      let inputItemUpdate = parseInt(
+        prompt("Select Data For Update : \n" + productList)
+      );
+      let userUpdateInput = inputItemUpdate - 1;
+      let updatedItem = prompt(
+        `Product ${items[userUpdateInput]} di Ubah menjadi: `
+      );
+      let updatedItemPrice = parseInt(
+        prompt(`Harga ${items[userUpdateInput]} di Ubah menjadi: `)
+      );
+      items.splice(userUpdateInput, 1, updatedItem);
+      itemPrices.splice(userUpdateInput, 1, updatedItemPrice);
+
+      // Exit
+    } else if ((userMenuInput = "5")) {
+      alert("Good Bye!");
+      break;
+    }
+  } while (true);
+</script>

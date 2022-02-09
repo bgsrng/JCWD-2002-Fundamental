@@ -1,0 +1,161 @@
+<script>
+  const items = ["Leci", "Apel", "Jeruk", "Mangga"];
+  const itemPrices = [7000, 5000, 3000, 10000];
+  const itemQty = [0, 0, 0, 0];
+
+  const mainMenu = () => {
+    let menus;
+    do {
+      menus = parseInt(
+        prompt(`Input Menu
+       1. Admin
+       2. User
+       3. Exit`)
+      );
+
+      if (menus === 1) {
+        alert("Hi Admin");
+        menuAdmin();
+      } else if (menus === 2) {
+        alert("Selamat Datang Ke Toko Buah Kami");
+        menuUser();
+      } else if (menus === 3) {
+        alert("Silahkan Berkunjung Kembali");
+        break;
+      }
+    } while (true);
+  };
+
+  const menuAdmin = () => {
+    let menus;
+    do {
+      menus = parseInt(
+        prompt(`Input Menu
+       1. Create Data
+       2. Show Data
+       3. Delete Data
+       4. Edit Data
+       5. Report
+       6. Back`)
+      );
+
+      if (menus === 1) {
+        alert("Ini Membuat Data");
+        let newProduct = prompt(`Input Product items:`);
+        let newProductPrice = parseInt(prompt(`Input Product items Price:`));
+
+        items.push(newProduct);
+        itemPrices.push(newProductPrice);
+      } else if (menus === 2) {
+        alert("Ini Menampilkan Data");
+        showData(false);
+      } else if (menus === 3) {
+        alert("Ini Delete Data");
+        let userDeleteInput = showData(true);
+
+        items.splice(userDeleteInput, 1);
+        itemPrices.splice(userDeleteInput, 1);
+      } else if (menus === 4) {
+        let userUpdateInput = showData(true);
+        let updatedData = prompt(
+          `Product ${items[userUpdateInput]} di Ubah menjadi: `
+        );
+        let updatedDataPrice = parseInt(
+          prompt(`Harga ${updatedData} di Ubah menjadi: `)
+        );
+        items.splice(userUpdateInput, 1, updatedData);
+        itemPrices.splice(userUpdateInput, 1, updatedDataPrice);
+      } else if (menus === 5) {
+        alert("Ini Report");
+        alert(report);
+      } else if (menus === 6) {
+        break;
+      }
+    } while (true);
+  };
+
+  const menuUser = () => {
+    let menus;
+    do {
+      menus = parseInt(
+        prompt(`Input Menu
+       1. Add to cart
+       2. Show Cart
+       3. Check Out
+       4. Back`)
+      );
+
+      if (menus === 1) {
+        let totalPrice = 0;
+        alert("Ini Add to Cart");
+        let userMenuInputIndex = showData(true);
+        let quantity = parseInt(
+          prompt(`Mau Beli berapa ${items[userMenuInputIndex]}?`)
+        );
+        itemQty[userMenuInputIndex] += quantity;
+      } else if (menus === 2) {
+        alert("Ini show Cart");
+        showCart();
+      } else if (menus === 3) {
+        alert("Ini CheckOut");
+        let cart = "";
+        let totalPrice = 0;
+        for (let i = 0; i < items.length; i++) {
+          cart += `${items[i]} x ${itemQty[i]} -> Rp. ${
+            itemQty[i] * itemPrices[i]
+          }\n`;
+          totalPrice += itemQty[i] * itemPrices[i];
+        }
+        cart += "------------------------------\n";
+        cart += `Total Price: Rp. ${totalPrice.toLocaleString()}`;
+        let payment = parseInt(prompt(cart));
+        if (payment > totalPrice) {
+          let kembalian = payment - totalPrice;
+          alert("Kembalian Anda : " + kembalian.toLocaleString());
+        } else if (payment < totalPrice) {
+          let kurang = totalPrice - payment;
+          alert("Uang Anda kurang: " + kurang.toLocaleString());
+        } else if (payment === totalPrice) {
+          alert("Thank You");
+        }
+        for (let j = 0; j < itemQty.length; j++) {
+          itemQty[j] = 0;
+        }
+      } else if (menus === 4) {
+        break;
+      }
+    } while (true);
+  };
+
+  const showData = (isPrompt = false) => {
+    let productList = "";
+    for (let i = 0; i < items.length; i++) {
+      productList += `${i + 1}. ${items[i]} || Rp.${itemPrices[
+        i
+      ].toLocaleString()}\n`;
+    }
+
+    if (isPrompt) {
+      let userInput = parseInt(prompt("Masukan Input \n" + productList));
+
+      let userInputIndex = userInput - 1;
+      return userInputIndex;
+    }
+    alert(productList);
+  };
+
+  const showCart = () => {
+    let cart = "";
+    let totalPrice = 0;
+    for (let i = 0; i < items.length; i++) {
+      cart += `${items[i]} x ${itemQty[i]} -> Rp. ${
+        itemQty[i] * itemPrices[i]
+      }\n`;
+      totalPrice += itemQty[i] * itemPrices[i];
+    }
+    cart += "------------------------------\n";
+    cart += `Total Price: Rp. ${totalPrice.toLocaleString()}`;
+    alert(cart);
+  };
+  mainMenu();
+</script>

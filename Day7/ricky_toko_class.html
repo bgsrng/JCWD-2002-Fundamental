@@ -1,0 +1,411 @@
+<script>
+  class Product {
+    constructor(productName, price) {
+      this.productName = productName;
+      this.price = price;
+      this.quantity = 0;
+    }
+    calculateTotalPrice = () => {
+      return this.price * this.quantity;
+    };
+
+    toCartString = () => {
+      return `${this.productName} x ${
+        this.quantity
+      } -> ${this.calculateTotalPrice().toLocaleString()}`;
+    };
+  }
+
+  class Book extends Product {
+    constructor(productName, price, author) {
+      super(productName, price);
+      this.author = author;
+    }
+    toMenuBookString = () => {
+      return `Book Name: ${this.productName} || Author : ${
+        this.author
+      } || Rp.${this.price.toLocaleString()}   `;
+    };
+  }
+
+  class Shirt extends Product {
+    constructor(productName, price, size) {
+      super(productName, price);
+      this.size = size;
+    }
+    toMenuShirtString = () => {
+      return `Nama Baju: ${this.productName} || Size : ${
+        this.size
+      } || Rp.${this.price.toLocaleString()}   `;
+    };
+  }
+
+  let books = [
+    new Book("LOTR", 10000, "J.R.R. Tolkien"),
+    new Book("Harry Potter", 8000, "J.K.Rowling"),
+    new Book("Sherlock", 12000, "Arthur Conan Doyle"),
+    new Book("Naruto", 15000, "Masashi Kishimoto"),
+  ];
+
+  let shirts = [
+    new Shirt("Baju Panda", 10000, "XL"),
+    new Shirt("Baju Kingkong", 8000, "L"),
+    new Shirt("Baju Monyet", 12000, "L"),
+    new Shirt("Baju Alien", 15000, "M"),
+  ];
+
+  let report = [];
+
+  const showMenu = (isPrompt = false, category) => {
+    if (category === "buku") {
+      let productList = "";
+      for (let i = 0; i < books.length; i++) {
+        productList += `${i + 1}. ${books[i].toMenuBookString()}\n`;
+      }
+      if (isPrompt) {
+        let userInput = prompt(productList);
+        userInput = parseInt(userInput);
+        let userInputIndex = userInput - 1;
+        return userInputIndex;
+      }
+      alert(productList);
+    } else if (category === "baju") {
+      let productList = "";
+      for (let i = 0; i < shirts.length; i++) {
+        productList += `${i + 1}. ${shirts[i].toMenuShirtString()}\n`;
+      }
+      if (isPrompt) {
+        let userInput = prompt(productList);
+        userInput = parseInt(userInput);
+        let userInputIndex = userInput - 1;
+        return userInputIndex;
+      }
+      alert(productList);
+    }
+    return;
+  };
+
+  const adminAddData = (category) => {
+    if (category === "buku") {
+      let userInputNewProduct = prompt("Anda mau menambahkan buku apa?");
+      let userInputNewAuthor = prompt("Anda mau menambahkan author apa?");
+      let userInputNewPrice = prompt("Berapa harga barang baru anda?");
+      userInputNewPrice = parseInt(userInputNewPrice);
+
+      let newProduct = new Book(
+        userInputNewProduct,
+        userInputNewPrice,
+        userInputNewAuthor
+      );
+      books.push(newProduct);
+
+      alert("Data tertambahkan!");
+    } else if (category === "baju") {
+      let userInputNewProduct = prompt("Anda mau menambahkan baju apa?");
+      let userInputNewSize = prompt("Anda mau menambahkan siza apa?");
+      let userInputNewPrice = prompt("Berapa harga barang baru anda?");
+      userInputNewPrice = parseInt(userInputNewPrice);
+
+      let newProduct = new Shirt(
+        userInputNewProduct,
+        userInputNewPrice,
+        userInputNewSize
+      );
+      shirts.push(newProduct);
+
+      alert("Data tertambahkan!");
+    }
+
+    return;
+  };
+
+  const adminDeleteData = (category) => {
+    if (category === "buku") {
+      const userDeleteItemIndex = showMenu(true, "buku");
+
+      books.splice(userDeleteItemIndex, 1);
+    } else if (category === "baju") {
+      const userDeleteItemIndex = showMenu(true, "baju");
+
+      shirts.splice(userDeleteItemIndex, 1);
+    }
+  };
+
+  const adminEditData = (category) => {
+    if (category === "buku") {
+      const userEditItemIndex = showMenu(true, "buku");
+      let userEditValue = prompt(
+        `Mau ubah ${books[userEditItemIndex].productName} menjadi apa?`
+      );
+      let userEditAuthorValue = prompt(
+        `Mau ubah ${books[userEditItemIndex].author} menjadi apa?`
+      );
+      let userEditPriceValue = prompt("Harganya berapa?");
+      userEditPriceValue = parseInt(userEditPriceValue);
+      books[userEditItemIndex] = new Book(
+        userEditValue,
+        userEditPriceValue,
+        userEditAuthorValue
+      );
+    } else if (category === "baju") {
+      const userEditItemIndex = showMenu(true, "baju");
+      let userEditValue = prompt(
+        `Mau ubah ${shirts[userEditItemIndex].productName} menjadi apa?`
+      );
+      let userEditSizeValue = prompt(
+        `Mau ubah ${shirts[userEditItemIndex].size} menjadi apa?`
+      );
+      let userEditPriceValue = prompt("Harganya berapa?");
+      userEditPriceValue = parseInt(userEditPriceValue);
+      shirts[userEditItemIndex] = new Shirt(
+        userEditValue,
+        userEditPriceValue,
+        userEditSizeValue
+      );
+    }
+  };
+
+  const showReport = () => {
+    let reportList = "";
+
+    if (report.length === 0) {
+      alert("Belum ada Transaksi");
+    } else {
+      for (let i = 0; i < report.length; i++) {
+        reportList += `${i + 1}. ${report[i].productName} Harga ${
+          report[i].price
+        } x ${report[i].quantity} -> Rp.${(
+          report[i].price * report[i].quantity
+        ).toLocaleString()}\n`;
+      }
+      alert(reportList);
+    }
+
+    return;
+  };
+
+  const userAddToCart = (category) => {
+    if (category === "buku") {
+      const userCartIndex = showMenu(true, "buku");
+
+      let userCartQty = prompt(
+        `Mau beli ${books[userCartIndex].productName} berapa banyak?`
+      );
+      userCartQty = parseInt(userCartQty);
+
+      books[userCartIndex].quantity += userCartQty;
+    } else if (category === "baju") {
+      const userCartIndex = showMenu(true, "baju");
+
+      let userCartQty = prompt(
+        `Mau beli ${shirts[userCartIndex].productName} berapa banyak?`
+      );
+      userCartQty = parseInt(userCartQty);
+
+      shirts[userCartIndex].quantity += userCartQty;
+    }
+  };
+
+  const userShowCart = (isCheckout = false, category) => {
+    let userCart = "";
+    if (category === "buku") {
+      let totalPrice = 0;
+
+      for (let i = 0; i < books.length; i++) {
+        userCart += `${i + 1}. ${books[i].toCartString()}\n`;
+
+        totalPrice += books[i].calculateTotalPrice();
+      }
+
+      if (isCheckout) {
+        // Tambah baris untuk total price
+        userCart += `\n Total belanjaan anda adalah Rp. ${totalPrice.toLocaleString()}`;
+
+        let userPayment = prompt(userCart);
+        userPayment = parseInt(userPayment);
+
+        // Kalau lebih (kembalian)
+        if (userPayment > totalPrice) {
+          alert(
+            `Kembalian anda sebesar Rp. ${(
+              userPayment - totalPrice
+            ).toLocaleString()}`
+          );
+        } else if (userPayment === totalPrice) {
+          alert("Terima kasih sudah membayar dengan uang pas");
+        } else if (userPayment < totalPrice) {
+          alert(
+            `Uang anda kurang Rp. ${(
+              totalPrice - userPayment
+            ).toLocaleString()}`
+          );
+        }
+
+        for (let i = 0; i < books.length; i++) {
+          if (books[i].quantity > 0) {
+            report.push({ ...books[i] });
+          }
+          books[i].quantity = 0;
+        }
+
+        return;
+      }
+    } else if (category === "baju") {
+      let totalPrice = 0;
+
+      for (let i = 0; i < shirts.length; i++) {
+        userCart += `${i + 1}. ${shirts[i].toCartString()}\n`;
+
+        totalPrice += shirts[i].calculateTotalPrice();
+      }
+
+      if (isCheckout) {
+        // Tambah baris untuk total price
+        userCart += `\n Total belanjaan anda adalah Rp. ${totalPrice.toLocaleString()}`;
+
+        let userPayment = prompt(userCart);
+        userPayment = parseInt(userPayment);
+
+        // Kalau lebih (kembalian)
+        if (userPayment > totalPrice) {
+          alert(
+            `Kembalian anda sebesar Rp. ${(
+              userPayment - totalPrice
+            ).toLocaleString()}`
+          );
+        } else if (userPayment === totalPrice) {
+          alert("Terima kasih sudah membayar dengan uang pas");
+        } else if (userPayment < totalPrice) {
+          alert(
+            `Uang anda kurang Rp. ${(
+              totalPrice - userPayment
+            ).toLocaleString()}`
+          );
+        }
+
+        for (let i = 0; i < shirts.length; i++) {
+          if (shirts[i].quantity > 0) {
+            report.push({ ...shirts[i] });
+          }
+          shirts[i].quantity = 0;
+        }
+
+        return;
+      }
+    }
+
+    alert(userCart);
+  };
+
+  do {
+    const userCategotyInput = prompt(`pilih kategory:
+                1. buku
+                2. baju
+                3. Exit`);
+    if (userCategotyInput == "1") {
+      do {
+        const userMainMenuInput = prompt(`Login sebagai:
+                1. Admin
+                2. User
+                3. Exit`);
+        if (userMainMenuInput == "1") {
+          do {
+            const adminMenuInput = prompt(`Menu:
+                1. Tambah data
+                2. Delete data
+                3. Show data
+                4. Edit data
+                5. Show report
+                6. Exit`);
+            if (adminMenuInput == "1") {
+              adminAddData("buku");
+            } else if (adminMenuInput == "2") {
+              adminDeleteData("buku");
+            } else if (adminMenuInput == "3") {
+              showMenu(false, "buku");
+            } else if (adminMenuInput == "4") {
+              // Jika user pilih update data
+              adminEditData("buku");
+            } else if (adminMenuInput == "5") {
+              showReport();
+            } else if (adminMenuInput == "6") {
+              break;
+            }
+          } while (true);
+        } else if (userMainMenuInput == "2") {
+          do {
+            const userMenuInput = prompt(`
+                    1. Add to cart
+                    2. Show cart
+                    3. Checkout
+                    4. Back`);
+            if (userMenuInput == "1") {
+              userAddToCart("buku");
+            } else if (userMenuInput == "2") {
+              userShowCart(false, "buku");
+            } else if (userMenuInput == "3") {
+              userShowCart(true, "buku");
+            } else if (userMenuInput == "4") {
+              break;
+            }
+          } while (true);
+        } else if (userMainMenuInput == "3") {
+          break;
+        }
+      } while (true);
+    } else if (userCategotyInput == "2") {
+      do {
+        const userMainMenuInput = prompt(`Login sebagai:
+                1. Admin
+                2. User
+                3. Exit`);
+        if (userMainMenuInput == "1") {
+          do {
+            const adminMenuInput = prompt(`Menu:
+                1. Tambah data
+                2. Delete data
+                3. Show data
+                4. Edit data
+                5. Show report
+                6. Exit`);
+            if (adminMenuInput == "1") {
+              adminAddData("baju");
+            } else if (adminMenuInput == "2") {
+              adminDeleteData("baju");
+            } else if (adminMenuInput == "3") {
+              showMenu(false, "baju");
+            } else if (adminMenuInput == "4") {
+              // Jika user pilih update data
+              adminEditData("baju");
+            } else if (adminMenuInput == "5") {
+              showReport();
+            } else if (adminMenuInput == "6") {
+              break;
+            }
+          } while (true);
+        } else if (userMainMenuInput == "2") {
+          do {
+            const userMenuInput = prompt(`
+                    1. Add to cart
+                    2. Show cart
+                    3. Checkout
+                    4. Back`);
+            if (userMenuInput == "1") {
+              userAddToCart("baju");
+            } else if (userMenuInput == "2") {
+              userShowCart(false, "baju");
+            } else if (userMenuInput == "3") {
+              userShowCart(true, "baju");
+            } else if (userMenuInput == "4") {
+              break;
+            }
+          } while (true);
+        } else if (userMainMenuInput == "3") {
+          break;
+        }
+      } while (true);
+    } else if (userCategotyInput == "3") {
+      break;
+    }
+  } while (true);
+</script>

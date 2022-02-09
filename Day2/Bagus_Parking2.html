@@ -1,0 +1,54 @@
+<script>
+  let loop = true;
+
+  while (loop == true) {
+    let userVehicle;
+    const Mobil = "1";
+    const Motor = "2";
+    const Exit = "3";
+
+    do {
+      userVehicle = prompt(`Pilih Kendaraan Anda :
+    1.Mobil
+    2.Motor
+    3.Exit`);
+    } while (
+      !(userVehicle == Mobil || userVehicle == Motor || userVehicle == Exit)
+    );
+
+    let durationInHours = 0;
+    let userTotalParkingFee = 0;
+
+    if (userVehicle == Mobil || userVehicle == Motor) {
+      do {
+        durationInHours = parseInt(prompt("Berapa Lama Anda Parkir? (Jam)"));
+      } while (durationInHours < 0);
+      if (durationInHours > 0) {
+        let firstTwoHours;
+        let feePerHour;
+        let maxFee;
+
+        if (userVehicle == Mobil) {
+          firstTwoHours = 5000;
+          feePerHour = 2000;
+          maxFee = 50000;
+        } else if (userVehicle == Motor) {
+          firstTwoHours = 3000;
+          feePerHour = 1000;
+          maxFee = 30000;
+        }
+        if (durationInHours <= 2) {
+          userTotalParkingFee = firstTwoHours;
+        } else if (durationInHours > 2) {
+          userTotalParkingFee =
+            firstTwoHours + feePerHour * (durationInHours - 2);
+        }
+        if (userTotalParkingFee > maxFee) {
+          userTotalParkingFee = maxFee;
+        }
+        alert(`Total Biaya Parkir Anda Adalah : Rp. ${userTotalParkingFee}`);
+      }
+      loop = confirm("Ulang Lagi?");
+    } else if (userVehicle == Exit) break;
+  }
+</script>
