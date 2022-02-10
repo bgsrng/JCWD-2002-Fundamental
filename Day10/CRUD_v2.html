@@ -11,7 +11,7 @@
       table,
       td,
       th {
-        border: 1px solid black;
+        border: 2px solid gray;
         border-collapse: collapse;
       }
     </style>
@@ -50,14 +50,25 @@
           </td>
           <td>
             <label for="genderPria">
-              <input checked id="genderPria" name="gender" type="radio" value="Pria" />Pria
+              <input
+                checked
+                id="genderPria"
+                name="gender"
+                type="radio"
+                value="Pria"
+              />Pria
             </label>
             <label for="genderWanita">
-              <input id="genderWanita" name="gender" type="radio" value="Wanita" />Wanita
+              <input
+                id="genderWanita"
+                name="gender"
+                type="radio"
+                value="Wanita"
+              />Wanita
             </label>
           </td>
           <td>
-            <input type="text" id="ageInput">
+            <input type="text" id="ageInput" />
           </td>
           <td colspan="2">
             <button onclick="addData()">Add</button>
@@ -96,29 +107,41 @@
               <td><input id="editFullName" value="${val.fullName}"></td>
               <td>
                 <select id="editOccupation">
-                  <option>Software Developer</option>
-                  <option>Digital Marketer</option>
-                  <option>UI/UX</option>
-                  <option>Data Scientist</option>
+                  <option ${
+                    val.occupation == "Software Developer" ? "selected" : ""
+                  } >Software Developer</option>
+                  <option ${
+                    val.occupation == "Digital Marketer" ? "selected" : ""
+                  }>Digital Marketer</option>
+                  <option ${
+                    val.occupation == "UI/UX" ? "selected" : ""
+                  }>UI/UX</option>
+                  <option ${
+                    val.occupation == "Data Scientist" ? "selected" : ""
+                  }>Data Scientist</option>
                 </select>
               </td>
               <td>
                 <label for="editGenderPria">
-                  <input id="editGenderPria" name="editGender" type="radio" value="Pria" />Pria
+                  <input ${
+                    val.gender == "Pria" ? "checked" : ""
+                  } id="editGenderPria" name="editGender" type="radio" value="Pria" />Pria
                 </label>
                 <label for="editGenderWanita">
-                  <input id="editGenderWanita" name="editGender" type="radio" value="Wanita" />Wanita
-                </label>  
+                  <input ${
+                    val.gender == "Wanita" ? "checked" : ""
+                  } id="editGenderWanita" name="editGender" type="radio" value="Wanita" />Wanita
+                </label>
               </td>
               <td><input id="editAge" value="${val.age}"></td>
               <td>
-                <button>Cancel</button>
+                <button onclick="renderData()">Cancel</button>
               </td>
               <td>
-                <button>Save</button>
+                <button onclick="saveEditData(${idx})">Save</button>
               </td>
             </tr>
-            `
+            `;
           } else {
             // Mode biasa
             htmlResult += `
@@ -151,16 +174,17 @@
         let ageInput = document.getElementById("ageInput").value;
         ageInput = parseInt(ageInput);
 
-        const isPriaChecked = document.getElementById("genderPria").checked
-        const isWanitaChecked = document.getElementById("genderWanita").checked
+        const isPriaChecked = document.getElementById("genderPria").checked;
+        const isWanitaChecked = document.getElementById("genderWanita").checked;
 
         let gender;
 
         // Jika radio Pria sedang dipilih / checked
         if (isPriaChecked) {
-          gender = document.getElementById("genderPria").value
-        } else if (isWanitaChecked) { // Jika radio Wanita sedang dipilih / checked
-          gender = document.getElementById("genderWanita").value
+          gender = document.getElementById("genderPria").value;
+        } else if (isWanitaChecked) {
+          // Jika radio Wanita sedang dipilih / checked
+          gender = document.getElementById("genderWanita").value;
         }
 
         // Input validation
@@ -189,7 +213,39 @@
 
       const deleteData = (deleteIdx) => {
         // alert(deleteIdx)
-        data.splice(deleteIdx, 1);
+        let shouldDelete = confirm("Yakin mau delete data?");
+
+        if (shouldDelete) {
+          data.splice(deleteIdx, 1);
+          renderData();
+        }
+      };
+
+      const saveEditData = (editIdx) => {
+        const fullNameInput = document.getElementById("editFullName").value;
+        const occupationInput = document.getElementById("editOccupation").value;
+        let ageInput = document.getElementById("editAge").value;
+        ageInput = parseInt(ageInput);
+
+        const isPriaChecked = document.getElementById("editGenderPria").checked;
+        const isWanitaChecked =
+          document.getElementById("editGenderWanita").checked;
+
+        let gender;
+
+        // Jika radio Pria sedang dipilih / checked
+        if (isPriaChecked) {
+          gender = document.getElementById("editGenderPria").value;
+        } else if (isWanitaChecked) {
+          // Jika radio Wanita sedang dipilih / checked
+          gender = document.getElementById("editGenderWanita").value;
+        }
+
+        data[editIdx].fullName = fullNameInput;
+        data[editIdx].occupation = occupationInput;
+        data[editIdx].age = ageInput;
+        data[editIdx].gender = gender;
+
         renderData();
       };
     </script>
