@@ -67,7 +67,7 @@ const oddAlphabetValue = (string) => {
 }
 
 
-console.log(oddAlphabetValue("fortinaitilababaji"));
+console.log(oddAlphabetValue("hasimilih"));
 
 // 4. Unique items
 // Diketahui ada 2 array of numbers, dimana 2 array tersebut memiliki beberapa
