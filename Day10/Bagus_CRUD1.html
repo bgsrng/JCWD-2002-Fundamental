@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <style>
+      table,
+      td,
+      th {
+        border-collapse: collapse;
+        border: 1px solid black;
+      }
+    </style>
+    <fieldset>
+      <legend>Employee Information</legend>
+      <label for="firstNameInput">First name:</label>
+      <input type="text" id="firstNameInput" name="firstName" />
+      <br />
+      <br />
+      <label for="lastNameInput">Last name:</label>
+      <input type="text" id="lastNameInput" name="lastName" />
+      <br />
+      <br />
+      <label for="emailInput">Email:</label>
+      <input type="email" id="emailInput" name="email" />
+      <br />
+      <br />
+      <label for="age">Age:</label>
+      <input type="number" id="ageInput" name="age" />
+      <br />
+      <br />
+      <label for="occupation">Occupation</label>
+      <select id="occupationInput">
+        <option>Software Developer</option>
+        <option>UI/UX</option>
+        <option>Digital Marketer</option>
+        <option>Data Scientist</option>
+      </select>
+      <br />
+      <br />
+      <button onclick="addData()">Create Data</button>
+    </fieldset>
+
+    <br />
+
+    <table>
+      <caption>
+        Employee Database
+      </caption>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Age</th>
+          <th>Occupation</th>
+          <th colspan="2">Action</th>
+        </tr>
+      </thead>
+
+      <tbody id="tableData"></tbody>
+    </table>
+
+    <br />
+    <br />
+
+    <fieldset>
+      <legend>Search Employee</legend>
+      <label for="fullNameSearch">Employee Name:</label>
+      <input type="text" id="fullNameSearch" name="fullNameSearch" />
+      <br />
+      <br />
+      <label for="occupationSearch">Occupation</label>
+      <select id="occupationSearch">
+        <option value="">All Occupations</option>
+        <option>Software Developer</option>
+        <option>UI/UX</option>
+        <option>Digital Marketer</option>
+        <option>Data Scientist</option>
+      </select>
+      <br />
+      <br />
+      <button id="search" onclick="searchEmployee()">Search Employee</button>
+    </fieldset>
+
+    <table>
+      <caption>
+        Search Results
+      </caption>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Age</th>
+          <th>Occupation</th>
+        </tr>
+      </thead>
+
+      <tbody id="searchResult">
+        <!-- <tr>
+          <td>1</td>
+          <td>John Doe</td>
+          <td>John@mail.com</td>
+          <td>29</td>
+          <td>Software Developer</td>
+        </tr> -->
+      </tbody>
+    </table>
+
+    <script>
+      class Person {
+        constructor({ fullName, email, age, occupation }) {
+          this.fullName = fullName;
+          this.email = email;
+          this.occupation = occupation;
+          this.age = age;
+        }
+      }
+      let data = [];
+
+      const renderData = (editIdx) => {
+        let htmlResult = "";
+
+        data.forEach((val, idx) => {
+          if (idx == editIdx) {
+            htmlResult += `
+                     <tr>
+                         <td>${idx + 1}</td>
+                         <td><input id="editFullName" value="${
+                           val.fullName
+                         }"></td>
+                         <td><input id="editEmail" value="${val.email}"></td>
+                         <td><input id="editAge" value="${val.age}"></td>
+                         <td>
+                             <select id="editOccupation">
+                                 <option ${
+                                   val.occupation == "Software Developer"
+                                     ? "selected"
+                                     : ""
+                                 }>Software Developer
+                                 </option>
+                                 <option ${
+                                   val.occupation == "Digital Marketer"
+                                     ? "selected"
+                                     : ""
+                                 }>Digital Marketer
+                                 </option>
+                                 <option ${
+                                   val.occupation == "UI/UX" ? "selected" : ""
+                                 }>UI/UX</option>
+                                 <option ${
+                                   val.occupation == "Data Scientist"
+                                     ? "selected"
+                                     : ""
+                                 }>Data Scientist</option>
+                             </select>
+                         </td>
+                         <td>
+                             <button onclick="renderData()">Cancel</button>
+                         </td>
+                         <td>
+                             <button onclick="saveEditData(${idx})">Save</button>
+                         </td>
+                     </tr>
+                     `;
+          } else {
+            htmlResult += `
+                <tr>
+                    <td>${idx + 1}</td>
+                    <td>${val.fullName}</td>
+                    <td>${val.email}</td>
+                    <td>${val.age}</td>
+                    <td>${val.occupation}</td>
+                    <td>
+                        <button onclick="renderData(${idx})">Edit</button>
+                    </td>
+                    <td>
+                        <button onclick="deleteData(${idx})">Delete</button>
+                    </td>
+                </tr>
+                `;
+          }
+        });
+        document.getElementById("tableData").innerHTML = htmlResult;
+      };
+
+      renderData();
+
+      const addData = () => {
+        const firstNameInput = document.getElementById("firstNameInput").value;
+        const lastNameInput = document.getElementById("lastNameInput").value;
+        const fullName = firstNameInput + " " + lastNameInput;
+
+        const emailInput = document.getElementById("emailInput").value;
+        const occupationInput =
+          document.getElementById("occupationInput").value;
+
+        let ageInput = document.getElementById("ageInput").value;
+        ageInput = parseInt(ageInput);
+
+        // Input validation
+        if (
+          !firstNameInput ||
+          !lastNameInput ||
+          !occupationInput ||
+          !ageInput ||
+          !emailInput
+        ) {
+          alert("mohon untuk mengisi semua field");
+          return;
+        }
+
+        const newPerson = new Person({
+          fullName: fullName,
+          occupation: occupationInput,
+          age: ageInput,
+          email: emailInput,
+        });
+
+        data.push(newPerson);
+
+        console.log(data);
+
+        // Tampilkan kembali data terbaru
+        renderData();
+
+        document.getElementById("firstNameInput").value = "";
+        document.getElementById("lastNameInput").value = "";
+        document.getElementById("emailInput").value = "";
+        document.getElementById("ageInput").value = "";
+      };
+
+      const deleteData = (deleteIdx) => {
+        // alert(deleteIdx)
+        data.splice(deleteIdx, 1);
+        renderData();
+      };
+
+      const saveEditData = (editIdx) => {
+        const fullNameInput = document.getElementById("editFullName").value;
+        const occupationInput = document.getElementById("editOccupation").value;
+        const emailInput = document.getElementById("editEmail").value;
+        let ageInput = document.getElementById("editAge").value;
+        ageInput = parseInt(ageInput);
+
+        data[editIdx].fullName = fullNameInput;
+        data[editIdx].occupation = occupationInput;
+        data[editIdx].age = ageInput;
+        data[editIdx].email = emailInput;
+
+        renderData();
+      };
+
+      const searchEmployee = () => {
+        let searchResult = "";
+        let employeeSearch = document.getElementById("fullNameSearch").value;
+        let occupationSearch =
+          document.getElementById("occupationSearch").value;
+
+        data.forEach((val, idx) => {
+          if (
+            val.fullName.toLowerCase().includes(employeeSearch.toLowerCase()) &&
+            val.occupation.includes(occupationSearch)
+          ) {
+            searchResult += `
+                    <tr>
+                        <td>${idx + 1}</td>
+                        <td>${val.fullName}</td>
+                        <td>${val.email}</td>
+                        <td>${val.age}</td>
+                        <td>${val.occupation}</td>
+                        <td>
+                    </tr>
+                    `;
+          }
+        });
+        document.getElementById("searchResult").innerHTML = searchResult;
+      };
+    </script>
+  </body>
+</html>
